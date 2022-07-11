@@ -1,0 +1,47 @@
+echo "# C-lculo-num-rico-An-lise-num-rica-" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Vlucass/C-lculo-num-rico-An-lise-num-rica-.git
+git push -u origin main
+
+def Gauss_Siedel(A, B, v_sol, n_iter):
+  c = 0
+  while c < n_iter: #método de parada.
+    c += 1
+    for i in range(len(A)):
+      if A[i][i] == 0: #critério de funcionamento
+        print("Não é possível utilizar o método com matrizes onde algum elemento da diagonal principal é nulo.")
+        break
+      else:
+        x = B[i] #O x será a constante da linha do x subtraída do...
+        for j in range(len(A)):
+          if i != j: #aqui são selecionados os elementos não associados a variável
+          #que queremos encontrar a solução.
+            x -= A[i][j]*v_sol[j] # ...coeficiente da variável multiplicada pelo
+            #valor da variável que será por último dividido pelo...
+        x /= A[i][i] #coeficiente da variável principal.
+        v_sol[i] = x #atualização do vetor solução para ser usado na mesma ite-
+        #ração.
+  print(v_sol)
+
+a = [[4, -1, 0, -1, 0, 0, 0, 0, 0, 0], 
+     [-1, 4, -1, 0, -1, 0, 0, 0, 0, 0],
+     [0, -1, 4, 0, 0, -1, 0, 0, 0, 0], 
+     [-1, 0, 0, 4, -1, 0, 0, 0, 0, 0],
+     [0, -1, 0, -1, 4, -1, -1, 0, 0, 0],
+     [0, 0, -1, 0, -1, 4, 0, -1, 0, 0],
+     [0, 0, 0, 0, -1, 0, 4, -1, 0, 0],
+     [0, 0, 0, 0, 0, -1, -1, 4, -1, 0],
+     [0, 0, 0, 0, 0, 0, 0, -1, 4, -1],
+     [0, 0, 0, 0, 0, 0, 0, 0, -1, 4]]
+
+b = [-110, -30, -40, -110, 0, -15, -90, -25, -55, -65]
+vsol = [20, 20, 20, 20, 20, 20, 20, 20, 20, 20]
+iteracoes = 20
+
+Gauss_Siedel(a, b, vsol, iteracoes)
+
+#A solução é mais aproximada pelo mesmo número de iterações, logo Gauss-Siedel é
+#um método iterativo mais rápido.
