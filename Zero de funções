@@ -1,0 +1,318 @@
+echo "# C-lculo-num-rico-An-lise-num-rica-" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Vlucass/C-lculo-num-rico-An-lise-num-rica-.git
+git push -u origin main
+
+#Problema 1 (a)
+"""
+
+import numpy as np
+import math
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+def f(x): #função que queremos encontrar raízes
+  return x - math.cos(x)
+
+a = 0 #intervalos
+b = 1
+e = 0.000001 #erro (tolerância)
+
+if f(a)*f(b)<0: #teorema de bozano para confirmar a existência de raízes no 
+                #intervalo dado
+  while (math.fabs(b-a)/2 > e): #equanto o valor absoluto da f(x) for maior que
+                                #o erro (dentro da tolerância)
+    xi = (b+a)/2 #primeiro valor de x no meio do intervalo
+    print(f"Raíz: {xi}, Imagem: {f(xi)}, Intervalo {b-a}")
+
+    if f(xi) == 0: #caso o primeiro xi seja uma raíz
+      print(f"{xi} é uma raíz!")
+      break
+    elif f(a)*f(xi) < 0: #caso não seja, o teorema de bozano atua novamente para
+                         #iterar sobre os valores a esquerda ou a direita de do 
+                         #x anterior
+        b = xi #caso em que a raíz se aproxima pela direita do xi
+    else:
+        a = xi #caso em que a raíz se aproxima pela esquerda do xi
+  print(f"{xi} é uma raíz da equação!")
+  print(f"A imagem da função para {xi} é {f(xi)}")
+else: #caso o teorema de bozano não seja satisfeito então podem ou não existir 
+      #raízes no intervalo a,b (teste inconclusivo)
+  print(f"O teorema é inconclusivo no intervalo de {a} até {b}.")
+
+"""#Problema 1 (b)"""
+
+import numpy as np
+import math
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+def f(x):
+  y = 2*np.cos(x)-(np.e**x)/2
+  return y
+
+a = 0
+b = 1
+e = 0.000001
+
+if f(a)*f(b)<0:
+  while (math.fabs(b-a)/2 > e):
+    xi = (b+a)/2
+    print(f"Raíz: {xi}")
+    print(f"Imagem: {f(xi)}")
+    print(f"Intervalo {b-a}")
+    if f(xi) == 0:
+      print(f"{xi} é uma raíz!")
+      break
+    elif f(a)*f(xi) < 0:
+        b = xi
+    else:
+        a = xi
+  print(f"{xi:.6f} é uma raíz da equação!")
+  print(f"A imagem da função para {xi:.6f} é {f(xi):.6f}")
+else:
+  print(f"O Teorema de Bozano é inconclusivo no intervalo de {a} até {b}.")
+
+"""#Problema 2"""
+
+import math
+import numpy as np
+
+#Método de Newton-Raphson
+#Primeiro definir a função.
+#Escolher um valor arbitrário que seja condição de convergência do método.
+#Definir a função de iteração do método. (Precisa da função, um valor x e da 
+#derivada da função).
+#Definir o método de parada (Tolerância, número de iterações, etc).
+
+def f(x): #Função definida.
+  y = x**3 - 9*x + 3
+  return
+
+def df(x): #Derivada da função f(x).
+  #Definirei h como um valor muito próximo de zero (limite).
+  #df será a variável que retorna o valor da derivada em f(x), a partir da 
+  #definição.
+  h = 10**-8
+  df = (f(x+h) - f(x))/h
+  return df
+
+x = 0 #Valor de x inicial.
+e = 10**-6 #Erro (tolerância).
+c = 1 #Contagem das iterações.
+
+while f(x) > e: #Método de parada.
+  x = x - f(x)/df(x) #Função de iteração Newton-Raphson.
+  print(f"Iteração {c}: x = {x} e f(x) = {f(x)}.")#Print das iterações.
+  c += 1
+if c != 1:
+  print(f"A raíz da função é {x}.") #Valor da melhor raíz possível.
+else:
+  print(f"A função de iteração do método usado não converge para a raíz com o valor de x = {x} selecionado.")
+
+"""#Problema 3 (a)"""
+
+import math
+import matplotlib.pyplot as plt
+import numpy as np
+
+x1 = np.linspace(-5, 5, 100)
+y1 = x1*np.log10(x1) - 1
+
+fig, ax = plt.subplots()
+plt.title("Primeira equação.", fontsize=16)
+ax.plot(x1,y1, color="green", label="y(x)")
+ax.set_xlabel("x", fontsize=18)
+ax.set_ylabel("y", fontsize=18)
+ax.legend()
+
+plt.grid()
+
+plt.savefig("Gráfico da primeira função.png", bbox_inches="tight")
+plt.show()
+
+x2 = np.linspace(-5, 2, 100)
+y2 = x2 - np.tanh(1.5*x2)
+
+fig, ax = plt.subplots()
+
+ax.plot(x2,y2, color="blue", label="y(x)")
+ax.set_xlabel("x", fontsize=18)
+ax.set_ylabel("y", fontsize=18)
+ax.legend()
+
+plt.title("Segunda equação.", fontsize=16)
+plt.grid()
+plt.savefig("Gráfico da segunda função.png", bbox_inches="tight")
+plt.show()
+
+"""#Problema 3 (b)"""
+
+import math
+import numpy as np
+
+def f(x):
+  return x*np.log10(x) - 1
+
+a = 2.1
+b = 2.6
+e = 10**(-7)
+c = 0
+
+if f(a)*f(b) < 0:
+  while math.fabs((b-a)/2) > e:
+    c += 1
+    xi = (b+a)/2
+    print(f"Iteração: {c}, Raíz: {xi}, Imagem: {f(xi)}, Intervalo {b-a}")
+    if f(xi) == 0: #caso o primeiro xi seja uma raíz
+      print(f"{xi} é uma raíz!")
+      break
+    elif f(a)*f(xi) < 0: #caso não seja, o teorema de bozano atua novamente para
+                         #iterar sobre os valores a esquerda ou a direita de do 
+                         #x anterior
+        b = xi #caso em que a raíz se aproxima pela direita do xi
+    else:
+        a = xi #caso em que a raíz se aproxima pela esquerda do xi
+  print(f"{xi} é uma raíz da equação!")
+  print(f"A imagem da função para {xi} é {f(xi)}")
+else: #caso o teorema de bozano não seja satisfeito então podem ou não existir
+      #raízes no intervalo a,b (teste inconclusivo)
+  print(f"O teorema é inconclusivo no intervalo de {a} até {b}.")
+
+def f(x): #Função definida.
+  return x*np.log10(x) - 1
+
+def df(x): #Derivada da função f(x).
+  #Definirei h como um valor muito próximo de zero (limite).
+  #df será a variável que retorna o valor da derivada em f(x), a partir da 
+  #definição.
+  h = 10**-8
+  df = (f(x+h) - f(x))/h
+  return df
+
+x = 3 #Valor de x inicial.
+e = 10**-6 #Erro (tolerância).
+c = 1 #Contagem das iterações.
+
+while f(x) > e: #Método de parada.
+  x = x - f(x)/df(x) #Função de iteração Newton-Raphson.
+  print(f"Iteração {c}: x = {x} e f(x) = {f(x)}.")#Print das iterações.
+  c += 1
+if c != 1:
+  print(f"A raíz da função é {x}.") #Valor da melhor raíz possível.
+else:
+  print(f"A função de iteração do método usado não converge para a raíz com o valor de x = {x} selecionado.")
+
+import math
+import numpy as np
+
+def f(x):
+  return x - np.tanh(1.5*x)
+
+
+a = -2
+b = 1
+e = 10**(-7)
+c = 0
+
+if f(a)*f(b) < 0:
+  while math.fabs((b-a)/2) > e:
+    c += 1
+    xi = (b+a)/2
+    print(f"Iteração: {c}, Raíz: {xi}, Imagem: {f(xi)}, Intervalo {b-a}.")
+    if f(xi) == 0: #caso o primeiro xi seja uma raíz
+      print(f"{xi} é uma raíz!")
+      break
+    elif f(a)*f(xi) < 0: #caso não seja, o teorema de bozano atua novamente para
+                         #iterar sobre os valores a esquerda ou a direita de do 
+                         #x anterior
+        b = xi #caso em que a raíz se aproxima pela direita do xi
+    else:
+        a = xi #caso em que a raíz se aproxima pela esquerda do xi
+  print(f"{xi} é uma raíz da equação!")
+  print(f"A imagem da função para {xi} é {f(xi)}")
+else: #caso o teorema de bozano não seja satisfeito então podem ou não existir 
+      #raízes no intervalo a,b (teste inconclusivo)
+  print(f"O teorema é inconclusivo no intervalo de {a} até {b}.")
+
+def f(x): #Função definida.
+  return x - np.tanh(1.5*x)
+
+def df(x): #Derivada da função f(x).
+  #Definirei h como um valor muito próximo de zero (limite).
+  #df será a variável que retorna o valor da derivada em f(x), a partir da 
+  #definição.
+  h = 10**-8
+  df = (f(x+h) - f(x))/h
+  return df
+
+x = -0.5 #Valor de x inicial.
+e = 10**-6 #Erro (tolerância).
+c = 1 #Contagem das iterações.
+
+while f(x) > e: #Método de parada.
+  x = x - f(x)/df(x) #Função de iteração Newton-Raphson.
+  print(f"Iteração {c}: x = {x} e f(x) = {f(x)}.")#Print das iterações.
+  c += 1
+if c != 1:
+  print(f"A raíz da função é {x}.") #Valor da melhor raíz possível.
+else:
+  print(f"A função de iteração do método usado não converge para a raíz com o valor de x = {x} selecionado.")
+
+"""#Problema 4 (a)
+
+$-e sen(E) = f(E)$\
+$M - E = f(E)$\
+$M - E = -e sen(E)$
+"""
+
+import matplotlib.pyplot as plt
+E = np.linspace(0,10,100)
+M = 2.5
+ep = 0.8
+plt.plot(E,M - E)
+plt.plot(E,-ep*np.sin(E))
+plt.plot(2.78172, M - 2.78172, 'o')
+plt.plot(2.78172, -ep*np.sin(2.78172), 'o',markersize = 1,color = 'red')
+plt.show()
+
+t = 10**(-6)
+
+def g(E):
+  return -ep*math.sin(E)
+def h(E):
+  return M - E
+
+def dg(E):
+  o = 10**(-8)
+  return (g(E + o) - g(E))/o
+def dh(E):
+  o = 10**(-8)
+  return (h(E + o) - h(E))/o
+
+E = 2.4
+
+while g(E) > t:
+  E = E - g(E)/dg(E)
+
+print(f"A raíz da primeira equação é {E}.")
+
+while h(E) > t:
+  E = E - h(E)/dh(E)
+
+print(f"A raíz da segunda equação é {E}.")
+
+import numpy as np
+import math
+E = np.linspace(2,4,100000)
+def g(E):
+  return -ep*math.sin(E)
+def h(E):
+  return M - E
+
+for i in E:
+  if '{:.4f}'.format(g(i)) == '{:.4f}'.format(h(i)):
+    print(f"{i}")
