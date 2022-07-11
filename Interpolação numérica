@@ -1,0 +1,114 @@
+echo "# C-lculo-num-rico-An-lise-num-rica-" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Vlucass/C-lculo-num-rico-An-lise-num-rica-.git
+git push -u origin main
+
+#Problema 1 (interpolação através de um sistema linear)
+
+1(a)
+"""
+
+import numpy as np
+import math
+from matplotlib import pyplot as plt
+
+def subs_retro(A, B): #solução retroativa (matriz triangular superior)
+  n = len(A) #ordem do vetor A
+  x = n * [0.0] #vetor solução
+  for i in range(n-1, -1, -1): #percorre do n-ésimo índice ao primeiro
+    Somatoria = 0
+    for j in range(i+1, n):
+      Somatoria += A[i][j] * x[j]
+    x[i] = (B[i] - Somatoria)/A[i][i] #i-ésimas soluções
+    B[i] = round(B[i], 2) #arredonda os elementos do vetor B
+    A[i][i] = round(A[i][i], 2) #inclui round para os elementos da diagonal de A
+    x[i] = round(x[i], 2) #arredonda, limita as casas decimais da solução
+  return x
+
+def e_gaussianaTS(A, B): #a matriz se torna triangular superior
+  n = len(A)
+  for k in range(0, n-1): #para cada etapa k
+    for i in range(k+1, n): #para cada linha i
+      m = - A[i][k]/A[k][k] #fator m
+      for j in range(k+1, n): #percorre as colunas j para atualizar todas as li-
+      #nhas i
+        A[i][j] += m*A[k][j] #altera a matriz A
+      B[i] += m*B[k] #altera o vetor B
+      A[i][k] = 0.0 
+  x = subs_retro(A, B) #soluções retroativas
+  return x
+
+A = [[1.0, -1.0, 1.0],
+     [1.0, 0.0, 0.0 ],
+     [1.0, 3.0, 9.0]]
+
+B = [15.0, 8.0, -1.0]
+
+x = [-1.0, 0.0, 3.0]
+a = e_gaussianaTS(A, B)
+print(a)
+
+xx = np.linspace(-1.0, 3.0, 1000)
+
+Px = 8.0 - 6.0*xx + xx**2.0
+
+plt.grid()
+plt.plot(xx, Px, color="blue")
+
+c = [15.0, 8.0, -1.0]
+plt.plot(x, c, "go")
+
+"""1(b)"""
+
+A = [[1.0, 0.1, 0.01, 0.001],
+     [1.0, 0.2, 0.04, 0.008],
+     [1.0, 0.3, 0.09, 0.027],
+     [1.0, 0.4, 0.16, 0.064]]
+
+B = [5.0, 13.0, -4.0, -8.0]
+
+x = [0.1, 0.2, 0.3, 0.4]
+a = e_gaussianaTS(A, B)
+print(a)
+
+xx = np.linspace(0.1, 0.4, 1000)
+
+Px = -66.0 + 1151.67*xx - 5050.0*(xx**2.0) + 6333.33*(xx**3.0)
+
+plt.grid()
+plt.plot(xx, Px, color="blue")
+
+c = [5.0, 13.0, -4.0, -8.0]
+plt.plot(x, c, "go")
+
+"""#Problema 2 (Interpolação polinomial pela forma de Lagrange)"""
+
+def interpol_lagrange(x, y, xx):
+  n = len(x) #será o número de iterações
+  pol = 0 #polinomio
+  for k in range(n):
+    prod = 1 #produtória
+    for j in range(n):
+      if k != j:
+        prod *= (xx - x[j])/(x[k] - x[j]) #valor lk tal que k # j
+    pol += prod*y[k]
+  return pol
+
+x = [-1.0, 0.0, 2.0]
+y = [4.0, 1.0, -1.0]
+xx = np.linspace(-1.0, 2.0, 1000) #conjunto de pontos x de 1000 dimensões (x)
+
+pol = [] #polinomio como array de 1000 dimensões f(x)
+for i in xx:
+  pol.append(interpol_lagrange(x, y, i))
+
+plt.grid()
+plt.plot(xx, pol, color="blue")
+plt.plot(x, y, "go")
+
+"""#Problema 3 (Interpolação polinomial pela forma de Newton)"""
+
+#não consegui fazer, gostaria de receber um passo-a-passo
