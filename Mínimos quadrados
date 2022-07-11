@@ -6,6 +6,8 @@ git branch -M main
 git remote add origin https://github.com/Vlucass/C-lculo-num-rico-An-lise-num-rica-.git
 git push -u origin main
 
+#Data1 e Data2 não são dados, crie um arquivo txt de duas colunas no formato f(x)/x.
+
 #Mínimos Quadrados
 
 Funções que anteriores que serão usadas para encontrar os coeficientes α da matriz Aα = B
