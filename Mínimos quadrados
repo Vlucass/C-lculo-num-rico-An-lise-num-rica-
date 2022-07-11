@@ -1,0 +1,137 @@
+echo "# C-lculo-num-rico-An-lise-num-rica-" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Vlucass/C-lculo-num-rico-An-lise-num-rica-.git
+git push -u origin main
+
+#Mínimos Quadrados
+
+Funções que anteriores que serão usadas para encontrar os coeficientes α da matriz Aα = B
+"""
+
+import numpy as np
+from matplotlib import pyplot as plt
+
+def subs_retro(A, B): #solução retroativa (matriz triangular superior)
+  n = len(A) #ordem do vetor A
+  x = n * [0] #vetor solução
+  for i in range(n-1, -1, -1): #percorre do n-ésimo índice ao primeiro
+    Somatoria = 0
+    for j in range(i+1, n):
+      Somatoria += A[i][j] * x[j]
+    x[i] = (B[i] - Somatoria)/A[i][i] #i-ésimas soluções
+    B[i] = round(B[i], 2) #arredonda os elementos do vetor B
+    A[i][i] = round(A[i][i], 2) #inclui round para os elementos da diagonal de A
+    x[i] = round(x[i], 2) #arredonda, limita as casas decimais da solução
+  return x
+
+def e_gaussianaTS(A, B): #a matriz se torna triangular superior
+  n = len(A)
+  for k in range(0, n-1): #para cada etapa k
+    for i in range(k+1, n): #para cada linha i
+      m = - A[i][k]/A[k][k] #fator m
+      for j in range(k+1, n): #percorre as colunas j para atualizar todas as li-
+      #nhas i
+        A[i][j] += m*A[k][j] #altera a matriz A
+      B[i] += m*B[k] #altera o vetor B
+      A[i][k] = 0 
+  x = subs_retro(A, B) #soluções retroativas
+  return x
+
+"""Definindo a função 𝜑(x)
+
+𝜑(x) = $\sum_{i = 1, k = 1}^{n, m} α_ig_i(x_k)$
+"""
+
+def q(x, gx, alpha): #Função phi que depende da imagem e domínio das funções g e 
+#dos coeficientes alpha
+  q = 0
+  for g, a in zip(gx, alpha): #gx é uma lista que contem as funções g e alpha a 
+  #lista com os coeficientes
+    q += g(x)*a #somatória que resulta em phi(x)
+  return q
+
+"""Definindo a matriz A e B a partir das funções g e f e resolvendo o sistema linear Aα = B (encontrar os coeficientes α) partir do método da eliminação gaussiana"""
+
+#A será a matriz aumentada dos coeficientes de alpha dados pelo somatório do 
+#produto g_j(x_k)*g_i(x_k) e B será dado pelo somatório do produto
+#f(x_k)*g_i(x_k)
+
+def m_AB(gx, x, y): #define as matrizes A e B e encontra os valores de alpha
+  k = len(gx) #será a ordem da matriz aumentada A a partir dos k elementos de gx
+  m = np.size(x) #m elementos x
+  A = np.zeros([k,k]) #matriz de zeros A
+  B = np.zeros([k]) #vetor de zeros B
+  for i in range(k): #preenchimento das matrizes
+    for n in range(m):
+      B[i] += y[n]*gx[i](x[n]) #preenchimento de B com os produtos
+      #f(x_k)*g_i(x_k)
+    for j in range(k):
+      for n in range(m):
+        A[i][j] += gx[i](x[n])*gx[j](x[n]) #preenchimento de A com os produtos
+        #g_j(x_k)*g_i(x_k)
+  alpha = e_gaussianaTS(A, B)
+  return alpha
+
+"""Agora tendo os valores que precisamos na função principal q (x, gx, alpha) podemos obter a melhor curva aproximada de f(x), 𝝋(x) = q(x, gx, alpha)"""
+
+#phi = q(x, gx, alpha) -> função phi(x) que será usada para plotar uma curva que
+#se aproxime de f(x)
+
+"""#Problema 1"""
+
+dados1 = np.loadtxt("data1.txt") #pontos experimentais
+
+x = dados1[:,0]
+y = dados1[:,1]
+
+plt.plot(x,y, "go")
+
+#Funções utilizadas
+def g1(x):
+  return 1
+def g2(x):
+  return x
+def g3(x):
+  return x**2
+
+gx = [g1, g2, g3] #funções g
+
+alpha = m_AB(gx, x, y) #definindo A e B e encontrando os coeficientes alpha
+phi = q(x, gx, alpha) #função phi
+#ajustes na plotagem
+x_min = np.min(x)
+x_max = np.max(x)
+xx = np.linspace(x_min, x_max, 1000)
+phi = q(xx, gx, alpha)
+
+plt.plot(xx, phi, color="green")
+
+"""#Problema 2"""
+
+dados1 = np.loadtxt("data1.txt") #pontos experimentais
+
+x = dados1[:,0]
+y = dados1[:,1]
+
+plt.plot(x,y, "go")
+
+#Funções utilizadas
+def g1(x):
+  return 1
+def g2(x):
+  return np.sin(np.pi*x/2)
+
+gx = [g1, g2] #funções g
+
+alpha = m_AB(gx, x, y) #definindo A e B e encontrando os coeficientes alpha
+phi = q(x, gx, alpha) #função phi
+#ajustes na plotagem
+x_min = np.min(x)
+x_max = np.max(x)
+xx = np.linspace(x_min, x_max, 1000)
+phi = q(xx, gx, alpha)
+
+plt.plot(xx, phi, color="green")
