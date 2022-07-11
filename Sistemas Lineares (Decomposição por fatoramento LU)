@@ -1,0 +1,128 @@
+echo "# C-lculo-num-rico-An-lise-num-rica-" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Vlucass/C-lculo-num-rico-An-lise-num-rica-.git
+git push -u origin main
+
+#Métodos diretos
+
+Soluções retroativas
+"""
+
+import math
+import numpy as np
+
+def subs_retro(A, B): #solução retroativa (matriz triangular superior)
+  n = len(A) #ordem do vetor A
+  x = n * [0] #vetor solução
+  for i in range(n-1, -1, -1): #percorre do n-ésimo índice ao primeiro
+    Somatoria = 0
+    for j in range(i+1, n):
+      Somatoria += A[i][j] * x[j]
+    x[i] = (B[i] - Somatoria)/A[i][i] #i-ésimas soluções
+    B[i] = round(B[i], 2) #arredonda os elementos do vetor B
+    A[i][i] = round(A[i][i], 2) #inclui round para os elementos da diagonal de A
+    x[i] = round(x[i], 2) #arredonda, limita as casas decimais da solução
+  return x
+
+"""Soluções sucessivas"""
+
+def subs_suc(A, B): #solução sucessiva (matriz triangular inferior)
+  n = len(A) #ordem do vetor A.
+  x = n * [0] #vetor solução.
+  for i in range(0, n): #percorre primeiro índice até o n-ésimo
+    Somatoria = 0
+    for j in range(0, i):
+      Somatoria += A[i][j] * x[j]
+    x[i] = (B[i] - Somatoria)/A[i][i] #i-ésimas soluções
+    B[i] = round(B[i], 2) #arredonda os elementos do vetor B
+    A[i][i] = round(A[i][i], 2) #inclui round para os elementos da diagonal de A
+    x[i] = round(x[i], 2) #arredonda, limita as casas decimais da solução
+  return x
+
+"""#Problema 1: Eliminação Gaussiana (Triangularização superior)"""
+
+def e_gaussianaTS(A, B): #a matriz se torna triangular superior
+  n = len(A)
+  for k in range(0, n-1): #para cada etapa k
+    for i in range(k+1, n): #para cada linha i
+      m = - A[i][k]/A[k][k] #fator m
+      for j in range(k+1, n): #percorre as colunas j para atualizar todas as li-
+      #nhas i
+        A[i][j] += m*A[k][j] #altera a matriz A
+      B[i] += m*B[k] #altera o vetor B
+      A[i][k] = 0 
+  x = subs_retro(A, B) #soluções retroativas
+  return x
+  
+A1 = [[3.0, 2.0, 4.0],
+     [1.0, 1.0, 2.0],
+     [4.0, 3.0, -2.0]]
+
+B1 = [1.0, 2.0, 3.0]
+
+x = e_gaussianaTS(A1, B1)
+
+print(x)
+print(A1)
+print(B1)
+
+"""#Fatoração LU
+
+Aqui serão usados os métodos da Eliminação Gaussiana(T. Inferior e superior), das soluções retroativas e sucessivas e geraremos uma matriz identidade.
+No final obteremos a solução do sistema LUx = b, em que Ly = b e Ux = y.
+
+Matriz identidade
+"""
+
+def identidade(n):
+  m = []
+  for i in range(0, n):
+    linha = [0.0]*n #gera uma linha de zeros com n colunas n vezes
+    linha[i] = 1.0 #substitui o i-ésimo elemento da linha de zeros por 1
+    m.append(linha) #acrescenta a substituição na matriz m n vezes
+  return m
+
+"""Decomposição de A em L (matriz triangular inferior unitária) e U (matriz triangular superior)."""
+
+def lu(A):
+  n = len(A)
+  L = identidade(n)
+  for k in range(0, n-1): #para cada etapa k
+    for i in range(k+1, n): #para cada linha i
+      m = - A[i][k]/A[k][k] #fator m
+      L[i][k] = -m #atualiza a matriz identidade
+      for j in range(k+1, n): #percorre as colunas j para atualizar todas as li-
+      #nhas i
+        A[i][j] += m*A[k][j] #altera a matriz A
+      A[i][k] = 0
+  return (L, A) #retorna duas matrizes triangulares, sendo L a m.t.inferior uni-
+  #tária e A a m.t.superior que será uma nova matriz U
+
+"""Resolução dos sistemas Ux = y e Ly = b
+
+"""
+
+def lux(L, U, B):
+  y = subs_suc(L, B)
+  x = subs_retro(U, y)
+  return x
+
+"""#Problema 2: Obtenção da solução do sistema A3x = B3 através de LU
+
+
+
+"""
+
+A3 = [[5.0, 2.0, 1.0],
+     [3.0, 1.0, 4.0],
+     [1.0, 1.0, 3.0]]
+
+B3 = [0.0, -7.0, -5.0]
+
+(L, U) = lu(A3) #decomposição/fatoramento de A
+x = lux(L, U, B3) #obtenção da solução a partir de L, U, Y e B
+
+print(x)
