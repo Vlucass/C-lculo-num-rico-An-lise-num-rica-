@@ -1,0 +1,157 @@
+echo "# C-lculo-num-rico-An-lise-num-rica-" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Vlucass/C-lculo-num-rico-An-lise-num-rica-.git
+git push -u origin main
+
+import numpy as np
+import math
+
+def f(x):
+  return np.cos(x)
+
+def df(x): #Derivada primeira pela definição
+  h = 10**(-8)
+  return (f(x + h) - f(x))/h
+
+def d2f(x): #Derivada segunda pela aproximação 
+  h = 10**-1
+  return (f(x - h) - (2.0*f(x)) + f(x + h))/(h**2.0)
+
+#def d2f(x): #Derivada segunda ela definição (aproximação ruim)
+ # h = 10**-6
+  #return (df(x + h) - df(x))/h
+
+x = np.pi/6
+y = f(x)
+dy = df(x)
+ddy = d2f(x)
+
+print(f"Valor de f(x): {y}. Valor de f'(x): {dy}. Valor de f''(x): {ddy}. Para x = {x}")
+
+"""Aproximação com erro 0.1"""
+
+import numpy as np
+import math
+
+def f(x):
+  return np.cos(x)
+
+def fd(x): #Método foward difference.
+  h = 10**-1
+  return (f(x + h) - f(x))/h
+
+def bd(x): #Método backward difference.
+  h = 10**-1
+  return (f(x) - f(x - h))/h
+
+def cd(x): #Método central difference.
+  h = 10**-1
+  return (f(x + h) - f(x - h))/(2*h)
+
+def cd5p(x): #Método central difference - 5 points.
+  h = 10**-1
+  return (f(x - 2*h) - 8*f(x - h) + 8*f(x + h) - f(x + 2*h))/(12*h)
+
+x = np.pi/6
+
+print(f"Primeira derivada pelo método FD: {fd(x)}. BD: {bd(x)}. CD: {cd(x)}. CD5P: {cd5p(x)}. ")
+
+"""Aproximação com erro 0.01"""
+
+def fd(x): #Método foward difference.
+  h = 10**-2
+  return (f(x + h) - f(x))/h
+
+def bd(x): #Método backward difference.
+  h = 10**-2
+  return (f(x) - f(x - h))/h
+
+def cd(x): #Método central difference.
+  h = 10**-2
+  return (f(x + h) - f(x - h))/(2*h)
+
+def cd5p(x): #Método central difference - 5 points.
+  h = 10**-2
+  return (f(x - 2*h) - 8*f(x - h) + 8*f(x + h) - f(x + 2*h))/(12*h)
+
+x = np.pi/6
+
+print(f"Primeira derivada pelo método FD: {fd(x)}. BD: {bd(x)}. CD: {cd(x)}. CD5P: {cd5p(x)}. ")
+
+"""Aproximação com erro 0.001"""
+
+def fd(x): #Método foward difference.
+  h = 10**-3
+  return (f(x + h) - f(x))/h
+
+def bd(x): #Método backward difference.
+  h = 10**-3
+  return (f(x) - f(x - h))/h
+
+def cd(x): #Método central difference.
+  h = 10**-3
+  return (f(x + h) - f(x - h))/(2*h)
+
+def cd5p(x): #Método central difference - 5 points.
+  h = 10**-3
+  return (f(x - 2*h) - 8*f(x - h) + 8*f(x + h) - f(x + 2*h))/(12*h)
+
+x = np.pi/6
+
+print(f"Primeira derivada pelo método FD: {fd(x)}. BD: {bd(x)}. CD: {cd(x)}. CD5P: {cd5p(x)}. ")
+
+"""#Problema 2"""
+
+import numpy
+import math
+
+m = 10 #massa
+g = 9.8 #aceleração da gravidade
+t = 0 #tempo (A aceleração é constante e não depende do tempo, a força também.)
+ang = 60 #ângulo em graus
+rad = (ang*np.pi)/180
+
+#x(t) = 30*t*np.cos(rad) e y(t) = 30*t*np.sin(rad) - (g*t**2)/2
+#Sabemos que F = m*a = m*d²x/dt², logo para acharmos a força que atua na
+#partícula nas posições x(t) e y(t) dadas precisamos da segunda derivada
+#dessas posições e multiplicar cada uma delas pela massa da partícula.
+
+def x(t): #posição x
+  return 30*t*np.cos(rad)
+
+def dx(t): #velocidade x
+  h = 10**(-8)
+  return (x(t+h) - x(t))/h
+
+def d2x(t): #aceleração x
+  h = 10**(-1)
+  return (x(t-h) - (2*x(t)) + x(t+h))/(h**2)
+def altd2x(t): #aceleração x (alternativa)
+  h = 10**(-6)
+  return (dx(t+h) - dx(t))/h
+
+def y(t): #posição y
+  return 30*t*np.sin(rad) - (g*t**2)/2
+
+def dy(t): #velocidade y
+  h = 10**(-8)
+  return (y(t+h) - y(t))/h
+
+def d2y(t): #aceleração y
+  h = 10**(-1)
+  return (y(t-h) - (2*y(t)) + y(t+h))/(h**2)
+def altd2y(t): #aceleração y (alternativa)
+  h = 10**(-6)
+  return (dy(t+h) - dy(t))/h
+
+fx = m*d2x(t) #força na posição x
+fy = m*d2y(t) #força na posição y
+fxalt = m*altd2x(t) #força na posição x (alternativo)
+fyalt = m*altd2y(t) #força na posição y (alternativo)
+
+print(f"Força da partícula na posição x: {fx:.3f}. Na posição y: {fy:.3f}.")
+
+print(f"Força da partícula na posição x: {fxalt:.3f}. Na posição y: {fyalt:.3f}. Derivação alternativa, menos aproximado.")
