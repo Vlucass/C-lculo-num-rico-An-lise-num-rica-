@@ -1,0 +1,68 @@
+echo "# C-lculo-num-rico-An-lise-num-rica-" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Vlucass/C-lculo-num-rico-An-lise-num-rica-.git
+git push -u origin main
+
+#Problema 1
+"""
+
+#Primeiro definimos um vetor inicial que se aproxime de um chute inicial da solu
+#ção desejada que terá seus elementos atualizados a cada iteração.
+
+#Essa iteração consiste em isolar cada uma das incógnitas e substituir os valo-
+#res encontrados na iteração anterior.
+
+#A matriz A não pode conter elementos nulos em sua diagnonal principal.
+
+#O método convergirá se o valor absoluto do termo diagonal na linha i é maior do
+#que a soma dos valores absolutos de todos os outros termos na mesma linha.(cri-
+#tério das linhas)
+
+def Gauss_Jacobi(A, B, v_sol, n_iter):
+  c = 0
+  v_aux = [] #vetor que será atualizado ao invés do vetor solução para que as
+  #próximas incógnitas sejam calculadas a partir de variáveis desatualizadas,
+  #caso contrário o método seria o de Gauss-Siedel e não de Gauss-Jacobi.
+  for k in range(len(A)):
+    v_aux.append(0)
+
+  while c < n_iter: #método de parada.
+    c += 1
+    for i in range(len(A)):
+      if A[i][i] == 0: #critério de funcionamento
+        print("Não é possível utilizar o método com matrizes onde algum elemento da diagonal principal é nulo.")
+        break
+      else:
+        x = B[i] #O x será a constante da linha do x subtraída do...
+        for j in range(len(A)):
+          if i != j: #aqui são selecionados os elementos não associados a variável
+          #que queremos encontrar a solução.
+            x -= A[i][j]*v_sol[j] # ...coeficiente da variável multiplicada pelo
+            #valor da variável que será por último dividido pelo...
+        x /= A[i][i] #coeficiente da variável principal.
+        v_aux[i] = x #atualização do vetor auxiliar para ser usado na próxima ite-
+        #ração.
+      v_sol = v_aux #atualiza o vetor solução
+  print(v_sol)
+
+a = [[4, -1, 0, -1, 0, 0, 0, 0, 0, 0], 
+     [-1, 4, -1, 0, -1, 0, 0, 0, 0, 0],
+     [0, -1, 4, 0, 0, -1, 0, 0, 0, 0], 
+     [-1, 0, 0, 4, -1, 0, 0, 0, 0, 0],
+     [0, -1, 0, -1, 4, -1, -1, 0, 0, 0],
+     [0, 0, -1, 0, -1, 4, 0, -1, 0, 0],
+     [0, 0, 0, 0, -1, 0, 4, -1, 0, 0],
+     [0, 0, 0, 0, 0, -1, -1, 4, -1, 0],
+     [0, 0, 0, 0, 0, 0, 0, -1, 4, -1],
+     [0, 0, 0, 0, 0, 0, 0, 0, -1, 4]]
+
+b = [-110, -30, -40, -110, 0, -15, -90, -25, -55, -65]
+vsol = [20, 20, 20, 20, 20, 20, 20, 20, 20, 20]
+iteracoes = 20
+
+Gauss_Jacobi(a, b, vsol, iteracoes)
+
+#OBS: Não consegui adaptar a implementação utilizando um erro (precisão), como método de parada.
